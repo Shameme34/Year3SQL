@@ -1,0 +1,58 @@
+SQL> set echo on
+SQL> set feedback on
+SQL> set linesize 100
+SQL> set pagesize 200
+SQL> set serveroutput on
+SQL> /* ===============================================================
+SQL>  * Assignment 2 Task 2b
+SQL>  * Name: Shameem Ahamed
+SQL>  * Student number: 7364283
+SQL>  * Date: 11 May 2023
+SQL>  * =============================================================*/
+SQL> --
+SQL> -- Task 2b) Creating trigger
+SQL> create or replace trigger checkNull
+  2  before insert on CUSTOMER
+  3  for each row
+  4  begin
+  5  if :NEW.c_comment is NULL then
+  6  :NEW.c_comment := 'New customer was created on ' || SYSDATE;
+  7  end if;
+  8  end;
+  9  /
+
+Trigger created.
+
+SQL> --
+SQL> -- Insert new customer
+SQL> insert into customer
+  2  values ('800000000','Customer#000000001', 'IVhzIApeRb ot,c,E','15','25-989-741-2988','711.56','BUILDING',NULL);
+
+1 row created.
+
+SQL> --
+SQL> -- Checking if c_comment was changed
+SQL> select c_comment
+  2  from customer
+  3  where c_custkey = 800000000;
+
+C_COMMENT                                                                                           
+----------------------------------------------------------------------------------------------------
+New customer was created on 13-MAY-23                                                               
+
+1 row selected.
+
+SQL> --
+SQL> -- Deleting newly added customer
+SQL> delete customer
+  2  where c_custkey = 800000000;
+
+1 row deleted.
+
+SQL> --
+SQL> -- Deleting trigger
+SQL> drop trigger checkNull;
+
+Trigger dropped.
+
+SQL> spool off;

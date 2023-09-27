@@ -1,0 +1,762 @@
+SQL> set feedback on
+SQL> set linesize 100
+SQL> set pagesize 200
+SQL> set serveroutput on
+SQL> /* ===============================================================
+SQL>  * Assignment 2 Task 1
+SQL>  * Name: Shameem Ahamed
+SQL>  * Student number: 7364283
+SQL>  * Date: 11 May 2023
+SQL>  * Disclamer: This part of the assignment only uses 3 indexes (orderIdx, partsuppIdx, customerIdx)
+SQL>  * The same index is dropped and created for every qn to show the difference between having the
+SQL>  * index and not having the index
+SQL>  * ordersIdx (o_orderdate, o_shippriority, o_custkey)
+SQL>  * partsuppIdx (ps_availqty, ps_partkey)
+SQL>  * customersIdx (c_phone, c_custkey)
+SQL>  * =============================================================*/
+SQL> --
+SQL> --
+SQL> -- Task 1i)
+SQL> --
+SQL> -- Before index
+SQL> explain plan for
+  2  select ps_availqty, ps_partkey
+  3  from partsupp;
+
+Explained.
+
+SQL> --
+SQL> -- Show the execution plan
+SQL> select * from table(dbms_xplan.display);
+
+PLAN_TABLE_OUTPUT                                                                                   
+----------------------------------------------------------------------------------------------------
+Plan hash value: 1162167413                                                                         
+                                                                                                    
+------------------------------------------------------------------------------                      
+| Id  | Operation         | Name     | Rows  | Bytes | Cost (%CPU)| Time     |                      
+------------------------------------------------------------------------------                      
+|   0 | SELECT STATEMENT  |          |   240K|  2109K|  1856   (1)| 00:00:01 |                      
+|   1 |  TABLE ACCESS FULL| PARTSUPP |   240K|  2109K|  1856   (1)| 00:00:01 |                      
+------------------------------------------------------------------------------                      
+
+8 rows selected.
+
+SQL> --
+SQL> -- After Index
+SQL> --
+SQL> create index partsuppIdx on partsupp(ps_availqty, ps_partkey);
+
+Index created.
+
+SQL> --
+SQL> explain plan for
+  2  select ps_availqty, ps_partkey
+  3  from partsupp;
+
+Explained.
+
+SQL> --
+SQL> -- Show the execution plan
+SQL> select * from table(dbms_xplan.display);
+
+PLAN_TABLE_OUTPUT                                                                                   
+----------------------------------------------------------------------------------------------------
+Plan hash value: 2029409142                                                                         
+                                                                                                    
+------------------------------------------------------------------------------------                
+| Id  | Operation            | Name        | Rows  | Bytes | Cost (%CPU)| Time     |                
+------------------------------------------------------------------------------------                
+|   0 | SELECT STATEMENT     |             |   240K|  2109K|   251   (1)| 00:00:01 |                
+|   1 |  INDEX FAST FULL SCAN| PARTSUPPIDX |   240K|  2109K|   251   (1)| 00:00:01 |                
+------------------------------------------------------------------------------------                
+
+8 rows selected.
+
+SQL> drop index partsuppIdx;
+
+Index dropped.
+
+SQL> --
+SQL> --
+SQL> --
+SQL> --
+SQL> --
+SQL> --
+SQL> -- Task 1ii)
+SQL> -- Before Index
+SQL> --
+SQL> explain plan for
+  2  select distinct extract(year from o_orderdate) as yearr, count(*) as cc
+  3  from orders
+  4  group by extract(year from o_orderdate);
+
+Explained.
+
+SQL> --
+SQL> -- Show the execution plan
+SQL> select * from table(dbms_xplan.display);
+
+PLAN_TABLE_OUTPUT                                                                                   
+----------------------------------------------------------------------------------------------------
+Plan hash value: 2183589723                                                                         
+                                                                                                    
+-----------------------------------------------------------------------------                       
+| Id  | Operation          | Name   | Rows  | Bytes | Cost (%CPU)| Time     |                       
+-----------------------------------------------------------------------------                       
+|   0 | SELECT STATEMENT   |        |  2406 | 19248 |  2707   (1)| 00:00:01 |                       
+|   1 |  HASH GROUP BY     |        |  2406 | 19248 |  2707   (1)| 00:00:01 |                       
+|   2 |   TABLE ACCESS FULL| ORDERS |   450K|  3515K|  2696   (1)| 00:00:01 |                       
+-----------------------------------------------------------------------------                       
+
+9 rows selected.
+
+SQL> --
+SQL> -- After Index
+SQL> --
+SQL> create index ordersIdx on orders(o_orderdate, o_shippriority, o_custkey);
+
+Index created.
+
+SQL> --
+SQL> explain plan for
+  2  select distinct extract(year from o_orderdate) as yearr, count(*) as cc
+  3  from orders
+  4  group by extract(year from o_orderdate);
+
+Explained.
+
+SQL> --
+SQL> -- Show the execution plan
+SQL> select * from table(dbms_xplan.display);
+
+PLAN_TABLE_OUTPUT                                                                                   
+----------------------------------------------------------------------------------------------------
+Plan hash value: 1347511013                                                                         
+                                                                                                    
+-----------------------------------------------------------------------------------                 
+| Id  | Operation             | Name      | Rows  | Bytes | Cost (%CPU)| Time     |                 
+-----------------------------------------------------------------------------------                 
+|   0 | SELECT STATEMENT      |           |  2406 | 19248 |   622   (3)| 00:00:01 |                 
+|   1 |  HASH GROUP BY        |           |  2406 | 19248 |   622   (3)| 00:00:01 |                 
+|   2 |   INDEX FAST FULL SCAN| ORDERSIDX |   450K|  3515K|   611   (1)| 00:00:01 |                 
+-----------------------------------------------------------------------------------                 
+
+9 rows selected.
+
+SQL> drop index ordersIdx;
+
+Index dropped.
+
+SQL> --
+SQL> --
+SQL> --
+SQL> --
+SQL> --
+SQL> --
+SQL> -- Task 1iii)
+SQL> --
+SQL> -- Before Index
+SQL> --
+SQL> explain plan for
+  2  select max(o_orderdate) as latest_order_date
+  3  from orders;
+
+Explained.
+
+SQL> --
+SQL> -- Show the execution plan
+SQL> select * from table(dbms_xplan.display);
+
+PLAN_TABLE_OUTPUT                                                                                   
+----------------------------------------------------------------------------------------------------
+Plan hash value: 630573765                                                                          
+                                                                                                    
+-----------------------------------------------------------------------------                       
+| Id  | Operation          | Name   | Rows  | Bytes | Cost (%CPU)| Time     |                       
+-----------------------------------------------------------------------------                       
+|   0 | SELECT STATEMENT   |        |     1 |     8 |  2696   (1)| 00:00:01 |                       
+|   1 |  SORT AGGREGATE    |        |     1 |     8 |            |          |                       
+|   2 |   TABLE ACCESS FULL| ORDERS |   450K|  3515K|  2696   (1)| 00:00:01 |                       
+-----------------------------------------------------------------------------                       
+
+9 rows selected.
+
+SQL> --
+SQL> -- After Index
+SQL> --
+SQL> create index ordersIdx on orders(o_orderdate, o_shippriority, o_custkey);
+
+Index created.
+
+SQL> --
+SQL> explain plan for
+  2  select max(o_orderdate) as latest_order_date
+  3  from orders;
+
+Explained.
+
+SQL> --
+SQL> -- Show the execution plan
+SQL> select * from table(dbms_xplan.display);
+
+PLAN_TABLE_OUTPUT                                                                                   
+----------------------------------------------------------------------------------------------------
+Plan hash value: 3149846750                                                                         
+                                                                                                    
+----------------------------------------------------------------------------------------            
+| Id  | Operation                  | Name      | Rows  | Bytes | Cost (%CPU)| Time     |            
+----------------------------------------------------------------------------------------            
+|   0 | SELECT STATEMENT           |           |     1 |     8 |     3   (0)| 00:00:01 |            
+|   1 |  SORT AGGREGATE            |           |     1 |     8 |            |          |            
+|   2 |   INDEX FULL SCAN (MIN/MAX)| ORDERSIDX |     1 |     8 |     3   (0)| 00:00:01 |            
+----------------------------------------------------------------------------------------            
+
+9 rows selected.
+
+SQL> drop index ordersIdx;
+
+Index dropped.
+
+SQL> --
+SQL> --
+SQL> --
+SQL> --
+SQL> --
+SQL> -- Task 1iv)
+SQL> --
+SQL> -- Before Index
+SQL> --
+SQL> explain plan for
+  2  select distinct o_orderdate, o_shippriority
+  3  from orders
+  4  order by o_orderdate;
+
+Explained.
+
+SQL> --
+SQL> -- Show the execution plan
+SQL> select * from table(dbms_xplan.display);
+
+PLAN_TABLE_OUTPUT                                                                                   
+----------------------------------------------------------------------------------------------------
+Plan hash value: 4122230513                                                                         
+                                                                                                    
+-----------------------------------------------------------------------------                       
+| Id  | Operation          | Name   | Rows  | Bytes | Cost (%CPU)| Time     |                       
+-----------------------------------------------------------------------------                       
+|   0 | SELECT STATEMENT   |        |  1702 | 17020 |  4505   (1)| 00:00:01 |                       
+|   1 |  SORT UNIQUE       |        |  1702 | 17020 |  4494   (1)| 00:00:01 |                       
+|   2 |   TABLE ACCESS FULL| ORDERS |   450K|  4394K|  2697   (1)| 00:00:01 |                       
+-----------------------------------------------------------------------------                       
+
+9 rows selected.
+
+SQL> --
+SQL> -- After Index
+SQL> --
+SQL> create index ordersIdx on orders(o_orderdate, o_shippriority, o_custkey);
+
+Index created.
+
+SQL> --
+SQL> explain plan for
+  2  select distinct o_orderdate, o_shippriority
+  3  from orders
+  4  order by o_orderdate;
+
+Explained.
+
+SQL> --
+SQL> -- Show the execution plan
+SQL> select * from table(dbms_xplan.display);
+
+PLAN_TABLE_OUTPUT                                                                                   
+----------------------------------------------------------------------------------------------------
+Plan hash value: 2049820385                                                                         
+                                                                                                    
+-----------------------------------------------------------------------------------                 
+| Id  | Operation             | Name      | Rows  | Bytes | Cost (%CPU)| Time     |                 
+-----------------------------------------------------------------------------------                 
+|   0 | SELECT STATEMENT      |           |  1702 | 17020 |  2419   (2)| 00:00:01 |                 
+|   1 |  SORT UNIQUE          |           |  1702 | 17020 |  2408   (1)| 00:00:01 |                 
+|   2 |   INDEX FAST FULL SCAN| ORDERSIDX |   450K|  4394K|   611   (1)| 00:00:01 |                 
+-----------------------------------------------------------------------------------                 
+
+9 rows selected.
+
+SQL> drop index ordersIdx;
+
+Index dropped.
+
+SQL> --
+SQL> --
+SQL> --
+SQL> --
+SQL> --
+SQL> --
+SQL> -- Task 1v)
+SQL> -- Before Index
+SQL> --
+SQL> explain plan for
+  2  select distinct orders.o_shippriority, part.p_partkey
+  3  from orders
+  4  inner join lineitem on orders.o_orderkey = l_orderkey
+  5  inner join part on lineitem.l_partkey = p_partkey;
+
+Explained.
+
+SQL> --
+SQL> -- Show the execution plan
+SQL> select * from table(dbms_xplan.display);
+
+PLAN_TABLE_OUTPUT                                                                                   
+----------------------------------------------------------------------------------------------------
+Plan hash value: 3424859209                                                                         
+                                                                                                    
+----------------------------------------------------------------------------------------            
+| Id  | Operation           | Name     | Rows  | Bytes |TempSpc| Cost (%CPU)| Time     |            
+----------------------------------------------------------------------------------------            
+|   0 | SELECT STATEMENT    |          | 42747 |   793K|       | 21100   (1)| 00:00:01 |            
+|   1 |  HASH UNIQUE        |          | 42747 |   793K|    47M| 21100   (1)| 00:00:01 |            
+|*  2 |   HASH JOIN         |          |  1776K|    32M|  8792K| 17235   (1)| 00:00:01 |            
+|   3 |    TABLE ACCESS FULL| ORDERS   |   450K|  3515K|       |  2697   (1)| 00:00:01 |            
+|   4 |    TABLE ACCESS FULL| LINEITEM |  1800K|    18M|       | 12144   (1)| 00:00:01 |            
+----------------------------------------------------------------------------------------            
+                                                                                                    
+Predicate Information (identified by operation id):                                                 
+---------------------------------------------------                                                 
+                                                                                                    
+   2 - access("ORDERS"."O_ORDERKEY"="L_ORDERKEY")                                                   
+                                                                                                    
+Note                                                                                                
+-----                                                                                               
+   - this is an adaptive plan                                                                       
+
+20 rows selected.
+
+SQL> --
+SQL> -- After Index
+SQL> --
+SQL> create index ordersIdx on orders(o_orderdate, o_shippriority, o_custkey);
+
+Index created.
+
+SQL> --
+SQL> explain plan for
+  2  select distinct orders.o_shippriority, part.p_partkey
+  3  from orders
+  4  inner join lineitem on orders.o_orderkey = l_orderkey
+  5  inner join part on lineitem.l_partkey = p_partkey;
+
+Explained.
+
+SQL> --
+SQL> -- Show the execution plan
+SQL> select * from table(dbms_xplan.display);
+
+PLAN_TABLE_OUTPUT                                                                                   
+----------------------------------------------------------------------------------------------------
+Plan hash value: 3424859209                                                                         
+                                                                                                    
+----------------------------------------------------------------------------------------            
+| Id  | Operation           | Name     | Rows  | Bytes |TempSpc| Cost (%CPU)| Time     |            
+----------------------------------------------------------------------------------------            
+|   0 | SELECT STATEMENT    |          | 42747 |   793K|       | 21100   (1)| 00:00:01 |            
+|   1 |  HASH UNIQUE        |          | 42747 |   793K|    47M| 21100   (1)| 00:00:01 |            
+|*  2 |   HASH JOIN         |          |  1776K|    32M|  8792K| 17235   (1)| 00:00:01 |            
+|   3 |    TABLE ACCESS FULL| ORDERS   |   450K|  3515K|       |  2697   (1)| 00:00:01 |            
+|   4 |    TABLE ACCESS FULL| LINEITEM |  1800K|    18M|       | 12144   (1)| 00:00:01 |            
+----------------------------------------------------------------------------------------            
+                                                                                                    
+Predicate Information (identified by operation id):                                                 
+---------------------------------------------------                                                 
+                                                                                                    
+   2 - access("ORDERS"."O_ORDERKEY"="L_ORDERKEY")                                                   
+                                                                                                    
+Note                                                                                                
+-----                                                                                               
+   - this is an adaptive plan                                                                       
+
+20 rows selected.
+
+SQL> drop index ordersIdx;
+
+Index dropped.
+
+SQL> --
+SQL> --
+SQL> --
+SQL> --
+SQL> --
+SQL> --
+SQL> -- Task 1vi)
+SQL> --
+SQL> -- Before Index
+SQL> --
+SQL> explain plan for
+  2  select distinct customer.c_custkey, count(orders.o_orderkey) as number_of_orders
+  3  from customer
+  4  join orders on customer.c_custkey = o_custkey
+  5  group by customer.c_custkey;
+
+Explained.
+
+SQL> --
+SQL> -- Show the execution plan
+SQL> select * from table(dbms_xplan.display);
+
+PLAN_TABLE_OUTPUT                                                                                   
+----------------------------------------------------------------------------------------------------
+Plan hash value: 2183589723                                                                         
+                                                                                                    
+-------------------------------------------------------------------------------------               
+| Id  | Operation          | Name   | Rows  | Bytes |TempSpc| Cost (%CPU)| Time     |               
+-------------------------------------------------------------------------------------               
+|   0 | SELECT STATEMENT   |        | 30162 |   147K|       |  3247   (1)| 00:00:01 |               
+|   1 |  HASH GROUP BY     |        | 30162 |   147K|  5304K|  3247   (1)| 00:00:01 |               
+|   2 |   TABLE ACCESS FULL| ORDERS |   450K|  2197K|       |  2695   (1)| 00:00:01 |               
+-------------------------------------------------------------------------------------               
+
+9 rows selected.
+
+SQL> --
+SQL> -- After Index
+SQL> --
+SQL> create index ordersIdx on orders(o_orderdate, o_shippriority, o_custkey);
+
+Index created.
+
+SQL> --
+SQL> explain plan for
+  2  select distinct customer.c_custkey, count(orders.o_orderkey) as number_of_orders
+  3  from customer
+  4  join orders on customer.c_custkey = o_custkey
+  5  group by customer.c_custkey;
+
+Explained.
+
+SQL> --
+SQL> -- Show the execution plan
+SQL> select * from table(dbms_xplan.display);
+
+PLAN_TABLE_OUTPUT                                                                                   
+----------------------------------------------------------------------------------------------------
+Plan hash value: 1347511013                                                                         
+                                                                                                    
+-------------------------------------------------------------------------------------------         
+| Id  | Operation             | Name      | Rows  | Bytes |TempSpc| Cost (%CPU)| Time     |         
+-------------------------------------------------------------------------------------------         
+|   0 | SELECT STATEMENT      |           | 30162 |   147K|       |  1162   (2)| 00:00:01 |         
+|   1 |  HASH GROUP BY        |           | 30162 |   147K|  5304K|  1162   (2)| 00:00:01 |         
+|   2 |   INDEX FAST FULL SCAN| ORDERSIDX |   450K|  2197K|       |   611   (1)| 00:00:01 |         
+-------------------------------------------------------------------------------------------         
+
+9 rows selected.
+
+SQL> drop index ordersIdx;
+
+Index dropped.
+
+SQL> --
+SQL> --
+SQL> --
+SQL> --
+SQL> --
+SQL> --
+SQL> --
+SQL> -- Task 1vii)
+SQL> -- Before Index
+SQL> --
+SQL> explain plan for
+  2  select count(distinct c_phone) as Distinct_phone
+  3  from customer;
+
+Explained.
+
+SQL> --
+SQL> -- Show the execution plan
+SQL> select * from table(dbms_xplan.display);
+
+PLAN_TABLE_OUTPUT                                                                                   
+----------------------------------------------------------------------------------------------------
+Plan hash value: 1728254594                                                                         
+                                                                                                    
+-----------------------------------------------------------------------------------------           
+| Id  | Operation            | Name     | Rows  | Bytes |TempSpc| Cost (%CPU)| Time     |           
+-----------------------------------------------------------------------------------------           
+|   0 | SELECT STATEMENT     |          |     1 |    17 |       |   631   (1)| 00:00:01 |           
+|   1 |  SORT AGGREGATE      |          |     1 |    17 |       |            |          |           
+|   2 |   VIEW               | VW_DAG_0 | 44708 |   742K|       |   631   (1)| 00:00:01 |           
+|   3 |    HASH GROUP BY     |          | 44708 |   698K|  1072K|   631   (1)| 00:00:01 |           
+|   4 |     TABLE ACCESS FULL| CUSTOMER | 45000 |   703K|       |   389   (0)| 00:00:01 |           
+-----------------------------------------------------------------------------------------           
+
+11 rows selected.
+
+SQL> --
+SQL> -- After Index
+SQL> --
+SQL> create index customerIdx on customer(c_phone,c_custkey);
+
+Index created.
+
+SQL> --
+SQL> explain plan for
+  2  select count(distinct c_phone) as Distinct_phone
+  3  from customer;
+
+Explained.
+
+SQL> --
+SQL> -- Show the execution plan
+SQL> select * from table(dbms_xplan.display);
+
+PLAN_TABLE_OUTPUT                                                                                   
+----------------------------------------------------------------------------------------------------
+Plan hash value: 589933536                                                                          
+                                                                                                    
+--------------------------------------------------------------------------------------              
+| Id  | Operation              | Name        | Rows  | Bytes | Cost (%CPU)| Time     |              
+--------------------------------------------------------------------------------------              
+|   0 | SELECT STATEMENT       |             |     1 |    17 |   201   (0)| 00:00:01 |              
+|   1 |  SORT AGGREGATE        |             |     1 |    17 |            |          |              
+|   2 |   VIEW                 | VW_DAG_0    | 44708 |   742K|   201   (0)| 00:00:01 |              
+|   3 |    SORT GROUP BY NOSORT|             | 44708 |   698K|   201   (0)| 00:00:01 |              
+|   4 |     INDEX FULL SCAN    | CUSTOMERIDX | 45000 |   703K|   201   (0)| 00:00:01 |              
+--------------------------------------------------------------------------------------              
+
+11 rows selected.
+
+SQL> drop index customerIdx;
+
+Index dropped.
+
+SQL> --
+SQL> --
+SQL> --
+SQL> --
+SQL> --
+SQL> --
+SQL> --
+SQL> -- Task 1viii)
+SQL> -- Before Index
+SQL> --
+SQL> explain plan for
+  2  select distinct extract(year from o_orderdate) as year, o_custkey
+  3  from orders
+  4  where extract(year from o_orderdate) >2020;
+
+Explained.
+
+SQL> --
+SQL> -- Show the execution plan
+SQL> select * from table(dbms_xplan.display);
+
+PLAN_TABLE_OUTPUT                                                                                   
+----------------------------------------------------------------------------------------------------
+Plan hash value: 3394267636                                                                         
+                                                                                                    
+-------------------------------------------------------------------------------------               
+| Id  | Operation          | Name   | Rows  | Bytes |TempSpc| Cost (%CPU)| Time     |               
+-------------------------------------------------------------------------------------               
+|   0 | SELECT STATEMENT   |        | 22500 |   285K|       |  2814   (1)| 00:00:01 |               
+|   1 |  HASH UNIQUE       |        | 22500 |   285K|   544K|  2814   (1)| 00:00:01 |               
+|*  2 |   TABLE ACCESS FULL| ORDERS | 22500 |   285K|       |  2706   (1)| 00:00:01 |               
+-------------------------------------------------------------------------------------               
+                                                                                                    
+Predicate Information (identified by operation id):                                                 
+---------------------------------------------------                                                 
+                                                                                                    
+   2 - filter(EXTRACT(YEAR FROM INTERNAL_FUNCTION("O_ORDERDATE"))>2020)                             
+
+14 rows selected.
+
+SQL> --
+SQL> -- After Index
+SQL> --
+SQL> create index ordersIdx on orders(o_orderdate, o_shippriority, o_custkey);
+
+Index created.
+
+SQL> --
+SQL> explain plan for
+  2  select distinct extract(year from o_orderdate) as year, o_custkey
+  3  from orders
+  4  where extract(year from o_orderdate) >2020;
+
+Explained.
+
+SQL> --
+SQL> -- Show the execution plan
+SQL> select * from table(dbms_xplan.display);
+
+PLAN_TABLE_OUTPUT                                                                                   
+----------------------------------------------------------------------------------------------------
+Plan hash value: 1920852497                                                                         
+                                                                                                    
+-------------------------------------------------------------------------------------------         
+| Id  | Operation             | Name      | Rows  | Bytes |TempSpc| Cost (%CPU)| Time     |         
+-------------------------------------------------------------------------------------------         
+|   0 | SELECT STATEMENT      |           | 22500 |   285K|       |   729   (2)| 00:00:01 |         
+|   1 |  HASH UNIQUE          |           | 22500 |   285K|   544K|   729   (2)| 00:00:01 |         
+|*  2 |   INDEX FAST FULL SCAN| ORDERSIDX | 22500 |   285K|       |   620   (2)| 00:00:01 |         
+-------------------------------------------------------------------------------------------         
+                                                                                                    
+Predicate Information (identified by operation id):                                                 
+---------------------------------------------------                                                 
+                                                                                                    
+   2 - filter(EXTRACT(YEAR FROM INTERNAL_FUNCTION("O_ORDERDATE"))>2020)                             
+
+14 rows selected.
+
+SQL> drop index ordersIdx;
+
+Index dropped.
+
+SQL> --
+SQL> --
+SQL> --
+SQL> --
+SQL> --
+SQL> --
+SQL> --
+SQL> -- Task 1ix)
+SQL> -- Before Index
+SQL> --
+SQL> explain plan for
+  2  select ps_partkey, sum(ps_availqty)
+  3  from partsupp
+  4  group by ps_partkey
+  5  order by ps_partkey;
+
+Explained.
+
+SQL> --
+SQL> -- Show the execution plan
+SQL> select * from table(dbms_xplan.display);
+
+PLAN_TABLE_OUTPUT                                                                                   
+----------------------------------------------------------------------------------------------------
+Plan hash value: 3865291199                                                                         
+                                                                                                    
+---------------------------------------------------------------------------------------             
+| Id  | Operation          | Name     | Rows  | Bytes |TempSpc| Cost (%CPU)| Time     |             
+---------------------------------------------------------------------------------------             
+|   0 | SELECT STATEMENT   |          | 60452 |   531K|       |  2332   (1)| 00:00:01 |             
+|   1 |  SORT GROUP BY     |          | 60452 |   531K|  4720K|  2332   (1)| 00:00:01 |             
+|   2 |   TABLE ACCESS FULL| PARTSUPP |   240K|  2109K|       |  1856   (1)| 00:00:01 |             
+---------------------------------------------------------------------------------------             
+
+9 rows selected.
+
+SQL> --
+SQL> -- After Index
+SQL> --
+SQL> create index partsuppIdx on partsupp(ps_availqty, ps_partkey);
+
+Index created.
+
+SQL> --
+SQL> explain plan for
+  2  select ps_partkey, sum(ps_availqty)
+  3  from partsupp
+  4  group by ps_partkey
+  5  order by ps_partkey;
+
+Explained.
+
+SQL> --
+SQL> -- Show the execution plan
+SQL> select * from table(dbms_xplan.display);
+
+PLAN_TABLE_OUTPUT                                                                                   
+----------------------------------------------------------------------------------------------------
+Plan hash value: 2513856599                                                                         
+                                                                                                    
+---------------------------------------------------------------------------------------------       
+| Id  | Operation             | Name        | Rows  | Bytes |TempSpc| Cost (%CPU)| Time     |       
+---------------------------------------------------------------------------------------------       
+|   0 | SELECT STATEMENT      |             | 60452 |   531K|       |   726   (1)| 00:00:01 |       
+|   1 |  SORT GROUP BY        |             | 60452 |   531K|  4720K|   726   (1)| 00:00:01 |       
+|   2 |   INDEX FAST FULL SCAN| PARTSUPPIDX |   240K|  2109K|       |   251   (1)| 00:00:01 |       
+---------------------------------------------------------------------------------------------       
+
+9 rows selected.
+
+SQL> drop index partsuppIdx;
+
+Index dropped.
+
+SQL> --
+SQL> --
+SQL> --
+SQL> --
+SQL> --
+SQL> --
+SQL> --
+SQL> -- Task 1x)
+SQL> -- Before Index
+SQL> --
+SQL> explain plan for
+  2  select distinct c_phone, c_custkey
+  3  from customer;
+
+Explained.
+
+SQL> --
+SQL> -- Show the execution plan
+SQL> select * from table(dbms_xplan.display);
+
+PLAN_TABLE_OUTPUT                                                                                   
+----------------------------------------------------------------------------------------------------
+Plan hash value: 2844954298                                                                         
+                                                                                                    
+------------------------------------------------------------------------------                      
+| Id  | Operation         | Name     | Rows  | Bytes | Cost (%CPU)| Time     |                      
+------------------------------------------------------------------------------                      
+|   0 | SELECT STATEMENT  |          | 45000 |   922K|   389   (0)| 00:00:01 |                      
+|   1 |  TABLE ACCESS FULL| CUSTOMER | 45000 |   922K|   389   (0)| 00:00:01 |                      
+------------------------------------------------------------------------------                      
+
+8 rows selected.
+
+SQL> --
+SQL> -- After Index
+SQL> --
+SQL> create index customerIdx on customer(c_phone,c_custkey);
+
+Index created.
+
+SQL> --
+SQL> explain plan for
+  2  select distinct c_phone, c_custkey
+  3  from customer;
+
+Explained.
+
+SQL> --
+SQL> -- Show the execution plan
+SQL> select * from table(dbms_xplan.display);
+
+PLAN_TABLE_OUTPUT                                                                                   
+----------------------------------------------------------------------------------------------------
+Plan hash value: 4239248751                                                                         
+                                                                                                    
+------------------------------------------------------------------------------------                
+| Id  | Operation            | Name        | Rows  | Bytes | Cost (%CPU)| Time     |                
+------------------------------------------------------------------------------------                
+|   0 | SELECT STATEMENT     |             | 45000 |   922K|    76   (0)| 00:00:01 |                
+|   1 |  INDEX FAST FULL SCAN| CUSTOMERIDX | 45000 |   922K|    76   (0)| 00:00:01 |                
+------------------------------------------------------------------------------------                
+
+8 rows selected.
+
+SQL> drop index customerIdx;
+
+Index dropped.
+
+SQL> --
+SQL> 
+SQL> 
+SQL> spool off;
