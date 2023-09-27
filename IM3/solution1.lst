@@ -1,0 +1,233 @@
+MongoDB shell version v4.0.4
+connecting to: mongodb://127.0.0.1:4000/db
+Implicit session: session { "id" : UUID("316d0db3-fc85-4642-b139-bdd124d22568") }
+MongoDB server version: 4.0.4
+Solution for IT3 Task 1
+============================
+Student number: 7364283
+Name: Shaik Dawood Shameem Ahamed
+Date: 23 May 2023
+============================
+
+Display in a pretty format information about an employee number 11. Do not list information about trips performed by the employee.
+
+db.transport.find({"EMPLOYEE.e#":"11"},{"EMPLOYEE.trips":0}).pretty()
+
+{
+	"_id" : ObjectId("646e521954524cb4592192cf"),
+	"EMPLOYEE" : {
+		"e#" : "11",
+		"name" : "Adam Fox",
+		"dob" : "04-MAY-70",
+		"address" : "45 Victoria St. Hurstville, NSW 2456",
+		"hiredate" : "12-JAN-99",
+		"position" : "driver",
+		"licence" : "20005",
+		"status" : "ON LEAVE"
+	}
+}
+
+Display in a pretty format information about all mechanics. For each mechanic, list only employee number, name, and position.
+
+db.transport.find({"EMPLOYEE.position":"mechanic"},{"EMPLOYEE.e#":1, "EMPLOYEE.name":1,"EMPLOYEE.position":1}).pretty()
+{
+	"_id" : ObjectId("646e521954524cb4592192c6"),
+	"EMPLOYEE" : {
+		"e#" : "2",
+		"name" : "Peter Taylor",
+		"position" : "mechanic"
+	}
+}
+{
+	"_id" : ObjectId("646e521954524cb4592192c8"),
+	"EMPLOYEE" : {
+		"e#" : "4",
+		"name" : "John Gray",
+		"position" : "mechanic"
+	}
+}
+{
+	"_id" : ObjectId("646e521954524cb4592192ca"),
+	"EMPLOYEE" : {
+		"e#" : "6",
+		"name" : "Michael Jones",
+		"position" : "mechanic"
+	}
+}
+{
+	"_id" : ObjectId("646e521954524cb4592192cc"),
+	"EMPLOYEE" : {
+		"e#" : "8",
+		"name" : "Peter O'Brien",
+		"position" : "mechanic"
+	}
+}
+{
+	"_id" : ObjectId("646e521954524cb4592192ce"),
+	"EMPLOYEE" : {
+		"e#" : "10",
+		"name" : "John Fox",
+		"position" : "mechanic"
+	}
+}
+{
+	"_id" : ObjectId("646e521954524cb4592192d0"),
+	"EMPLOYEE" : {
+		"e#" : "12",
+		"name" : "Phillip Cox",
+		"position" : "mechanic"
+	}
+}
+{
+	"_id" : ObjectId("646e521954524cb4592192d2"),
+	"EMPLOYEE" : {
+		"e#" : "14",
+		"name" : "Andrew R. Smith",
+		"position" : "mechanic"
+	}
+}
+
+Display in a pretty format information about the trucks with the registration numbers PKR768 and PKR008 and SST005. Do not list identifiers of the documents.
+
+db.transport.find({"EMPLOYEE.e#":"11"},{"EMPLOYEE.trips":0}).pretty()
+
+{
+	"TRUCK" : {
+		"registration" : "PKR008",
+		"capacity" : "22000",
+		"weight" : "8800",
+		"status" : "AVAILABLE"
+	}
+}
+{
+	"TRUCK" : {
+		"registration" : "PKR768",
+		"capacity" : "1234",
+		"weight" : "3000",
+		"status" : "AVAILABLE"
+	}
+}
+{
+	"TRUCK" : {
+		"registration" : "SST005",
+		"capacity" : "12000",
+		"weight" : "50000",
+		"status" : "USED"
+	}
+}
+
+Find the total number of employees
+
+db.transport.count({"EMPLOYEE.e#":{$gt: "0"}})
+
+15
+
+Find the total number of mechanics
+
+db.transport.count({"EMPLOYEE.position":"mechanic"})
+
+7
+
+Display in a pretty format the names and positions of all employees
+
+db.transport.find({"EMPLOYEE.e#":{$gt: "0"}},{"EMPLOYEE.name":1,"EMPLOYEE.position":1,"_id":0}).pretty()
+
+{ "EMPLOYEE" : { "name" : "John Smith", "position" : "driver" } }
+{ "EMPLOYEE" : { "name" : "Peter Taylor", "position" : "mechanic" } }
+{ "EMPLOYEE" : { "name" : "John Doe", "position" : "driver" } }
+{ "EMPLOYEE" : { "name" : "John Gray", "position" : "mechanic" } }
+{ "EMPLOYEE" : { "name" : "Adam Taylor", "position" : "driver" } }
+{ "EMPLOYEE" : { "name" : "Michael Jones", "position" : "mechanic" } }
+{ "EMPLOYEE" : { "name" : "Frederic Jones", "position" : "driver" } }
+{ "EMPLOYEE" : { "name" : "Peter O'Brien", "position" : "mechanic" } }
+{ "EMPLOYEE" : { "name" : "John Lucas", "position" : "driver" } }
+{ "EMPLOYEE" : { "name" : "John Fox", "position" : "mechanic" } }
+{ "EMPLOYEE" : { "name" : "Adam Fox", "position" : "driver" } }
+{ "EMPLOYEE" : { "name" : "Phillip Cox", "position" : "mechanic" } }
+{ "EMPLOYEE" : { "name" : "Andrew K. Smith", "position" : "driver" } }
+{ "EMPLOYEE" : { "name" : "Andrew R. Smith", "position" : "mechanic" } }
+{ "EMPLOYEE" : { "name" : "Michael Potter", "position" : "driver" } }
+
+Display in a pretty format the registrations number of all trucks maintained by John Fox. there is no need to remove duplicates from a listing.
+
+db.transport.find({"EMPLOYEE.name":"John Fox"},{"EMPLOYEE.maintenances":1, "_id":0}).pretty()
+
+{
+	"EMPLOYEE" : {
+		"maintenances" : [
+			{
+				"registration" : "LUCY01",
+				"time" : "200",
+				"maintenance date" : "03-JUN-94"
+			},
+			{
+				"registration" : "LUCY01",
+				"time" : "200",
+				"maintenance date" : "29-JUL-00"
+			},
+			{
+				"registration" : "KKK007",
+				"time" : "250",
+				"maintenance date" : "28-JUL-01"
+			},
+			{
+				"registration" : "QRT834",
+				"time" : "50",
+				"maintenance date" : "29-APR-01"
+			},
+			{
+				"registration" : "PKR768",
+				"time" : "20",
+				"maintenance date" : "28-MAR-01"
+			},
+			{
+				"registration" : "KKK007",
+				"time" : "400",
+				"maintenance date" : "28-JUL-02"
+			},
+			{
+				"registration" : "QRT834",
+				"time" : "50",
+				"maintenance date" : "29-JUN-02"
+			},
+			{
+				"registration" : "PKR768",
+				"time" : "50",
+				"maintenance date" : "28-AUG-02"
+			}
+		]
+	}
+}
+
+Display in a pretty format the names of mechanics who maintained a car with a registration LUCY01.
+
+db.transport.find({"EMPLOYEE.maintenances.registration":"LUCY01"},{"EMPLOYEE.name":1,"_id":0}).pretty()
+
+{ "EMPLOYEE" : { "name" : "Michael Jones" } }
+{ "EMPLOYEE" : { "name" : "John Fox" } }
+
+Display in a pretty format the names of drivers who performed no trips so far.
+
+db.transport.find({"EMPLOYEE.trips":null, "EMPLOYEE.name":{$not:{$eq:null}}},{"EMPLOYEE.name":1,"_id":0}).pretty()
+
+{ "EMPLOYEE" : { "name" : "Peter Taylor" } }
+{ "EMPLOYEE" : { "name" : "John Gray" } }
+{ "EMPLOYEE" : { "name" : "Michael Jones" } }
+{ "EMPLOYEE" : { "name" : "Peter O'Brien" } }
+{ "EMPLOYEE" : { "name" : "John Fox" } }
+{ "EMPLOYEE" : { "name" : "Phillip Cox" } }
+{ "EMPLOYEE" : { "name" : "Andrew R. Smith" } }
+
+Display in a pretty format names of drivers who started at least on trip in Wollongong.
+
+db.transport.find({"EMPLOYEE.trips.legs":"Wollongong"},{"EMPLOYEE.name":1,"_id":0}).pretty()
+
+{ "EMPLOYEE" : { "name" : "John Smith" } }
+{ "EMPLOYEE" : { "name" : "John Doe" } }
+{ "EMPLOYEE" : { "name" : "Adam Taylor" } }
+{ "EMPLOYEE" : { "name" : "Frederic Jones" } }
+{ "EMPLOYEE" : { "name" : "John Lucas" } }
+{ "EMPLOYEE" : { "name" : "Adam Fox" } }
+
+true
+bye

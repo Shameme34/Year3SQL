@@ -1,0 +1,252 @@
+MongoDB shell version v4.0.4
+connecting to: mongodb://127.0.0.1:4000/db
+Implicit session: session { "id" : UUID("d0685e66-60a8-4207-93c5-e87f48af0104") }
+MongoDB server version: 4.0.4
+Solution for A3, Task 3
+============================
+Student number: 7364283
+Name: Shaik Dawood Shameem Ahamed
+Date: 23 May 2023
+============================
+
+List the customer name, address and the created shopping cart who purchased product P1001
+
+db.shoppingCart.aggregate([{$unwind:"$CUSTOMER.creates.SHOPPINGCART"},{$project:{"CUSTOMER.customerName":1, "CUSTOMER.customerAddress":1,"CUSTOMER.creates.SHOPPINGCART":1}},{$match: {"CUSTOMER.creates.SHOPPINGCART.containsProdList.productId":"P1001"}}]).pretty()
+
+{
+	"_id" : "C12345",
+	"CUSTOMER" : {
+		"customerName" : "Paul Adams",
+		"customerAddress" : {
+			"street" : "718 Main Street",
+			"building" : "Idea Tower 1",
+			"postalCode" : "468419",
+			"country" : "Singapore"
+		},
+		"creates" : {
+			"SHOPPINGCART" : {
+				"cartId" : "cart001",
+				"dateCreated" : ISODate("2023-05-14T00:00:00Z"),
+				"dateClosed" : null,
+				"containsProdList" : [
+					{
+						"prodListId" : 1,
+						"productId" : "P1002",
+						"quantity" : 2
+					},
+					{
+						"prodListId" : 2,
+						"productId" : "P1001",
+						"quantity" : 1
+					}
+				]
+			}
+		}
+	}
+}
+{
+	"_id" : "C12345",
+	"CUSTOMER" : {
+		"customerName" : "Paul Adams",
+		"customerAddress" : {
+			"street" : "718 Main Street",
+			"building" : "Idea Tower 1",
+			"postalCode" : "468419",
+			"country" : "Singapore"
+		},
+		"creates" : {
+			"SHOPPINGCART" : {
+				"cartId" : "cart002",
+				"dateCreated" : ISODate("2023-05-07T00:00:00Z"),
+				"dateClosed" : ISODate("2023-05-14T00:00:00Z"),
+				"containsProdList" : [
+					{
+						"prodListId" : 1,
+						"productId" : "P1001",
+						"quantity" : 3
+					}
+				]
+			}
+		}
+	}
+}
+{
+	"_id" : "C12347",
+	"CUSTOMER" : {
+		"customerName" : "James Scott",
+		"customerAddress" : {
+			"street" : "18 Bukit Timah",
+			"building" : "Rose",
+			"postalCode" : "589616",
+			"country" : "Singapore"
+		},
+		"creates" : {
+			"SHOPPINGCART" : {
+				"cartId" : "cart004",
+				"dateCreated" : ISODate("2023-05-09T00:00:00Z"),
+				"dateClosed" : null,
+				"containsProdList" : [
+					{
+						"prodListId" : 1,
+						"productId" : "P1001",
+						"quantity" : 3
+					}
+				]
+			}
+		}
+	}
+}
+
+List the customer name, address, and the created shopping cart of the customer who created a shopping cart on 06 May 2023 (ISODate("023-05-06T00:00:00Z")). Please do not show the customer id.
+
+db.shoppingCart.aggregate([{$unwind:"$CUSTOMER.creates.SHOPPINGCART"},{$project:{"CUSTOMER.customerName":1, "CUSTOMER.customerAddress":1,"CUSTOMER.creates.SHOPPINGCART":1}},{$match: {"CUSTOMER.creates.SHOPPINGCART.dateCreated":ISODate("2023-05-06T00:00:00Z")}}]).pretty()
+
+{
+	"_id" : "C12347",
+	"CUSTOMER" : {
+		"customerName" : "James Scott",
+		"customerAddress" : {
+			"street" : "18 Bukit Timah",
+			"building" : "Rose",
+			"postalCode" : "589616",
+			"country" : "Singapore"
+		},
+		"creates" : {
+			"SHOPPINGCART" : {
+				"cartId" : "cart003",
+				"dateCreated" : ISODate("2023-05-06T00:00:00Z"),
+				"dateClosed" : ISODate("2023-05-06T00:00:00Z"),
+				"containsProdList" : [
+					{
+						"prodListId" : 1,
+						"productId" : "P1002",
+						"quantity" : 2
+					},
+					{
+						"prodListId" : 2,
+						"productId" : "P1003",
+						"quantity" : 1
+					}
+				]
+			}
+		}
+	}
+}
+
+Find the total number of shopping cart created by each customer. For each customer, list his/her email address and the total number of shopping cart created.
+
+db.shoppingCart.aggregate([{$unwind: "$CUSTOMER.creates.SHOPPINGCART"},{$group:{_id:"$CUSTOMER.customerEmail", "Total number of Shopping cart":{"$sum":1}}}]).pretty()
+
+{ "_id" : "c12347@gmail.com", "Total number of Shopping cart" : 3 }
+{ "_id" : "c12345@gmail.com", "Total number of Shopping cart" : 2 }
+
+Find the products that have been included in at least 2 or 3 shopping carts.
+
+db.shoppingCart.find({$or:[{"PRODUCT.includedIn":{"$size":3}},{"PRODUCT.includedIn":{"$size":2}}]}).pretty()
+
+{
+	"_id" : "P1001",
+	"PRODUCT" : {
+		"productId" : "P1001",
+		"productName" : "HD Scanner",
+		"price" : {
+			"unit" : "Dollar",
+			"base" : "Australian",
+			"value" : 800
+		},
+		"includedIn" : [
+			"cart001",
+			"cart002",
+			"cart004"
+		]
+	}
+}
+{
+	"_id" : "P1002",
+	"PRODUCT" : {
+		"productId" : "P1002",
+		"productName" : "Red Toner",
+		"price" : {
+			"unit" : "Dollar",
+			"base" : "Singapore",
+			"value" : 90
+		},
+		"includedIn" : [
+			"cart001",
+			"cart003",
+			"cart005"
+		]
+	}
+}
+
+For each price base, list the price base and the total number of each price base.
+
+db.shoppingCart.aggregate([{$unwind: "$PRODUCT"},{$group:{_id:"$PRODUCT.price.base", "Total number of price base":{"$sum":1}}}]).pretty()
+
+{ "_id" : "Singapore", "Total number of price base" : 2 }
+{ "_id" : "US", "Total number of price base" : 1 }
+{ "_id" : "Australian", "Total number of price base" : 1 }
+
+Find the customers who have purchased both the products P1002 and P1003.
+
+db.shoppingCart.aggregate([{$unwind:"$CUSTOMER.creates.SHOPPINGCART"},{$project:{"CUSTOMER.customerName":1, "CUSTOMER.customerAddress":1,"CUSTOMER.creates.SHOPPINGCART":1}},{$match:{$and:[{"CUSTOMER.creates.SHOPPINGCART.containsProdList.productId":"P1003"},{"CUSTOMER.creates.SHOPPINGCART.containsProdList.productId":"P1002"}]}}]).pretty()
+
+{
+	"_id" : "C12347",
+	"CUSTOMER" : {
+		"customerName" : "James Scott",
+		"customerAddress" : {
+			"street" : "18 Bukit Timah",
+			"building" : "Rose",
+			"postalCode" : "589616",
+			"country" : "Singapore"
+		},
+		"creates" : {
+			"SHOPPINGCART" : {
+				"cartId" : "cart003",
+				"dateCreated" : ISODate("2023-05-06T00:00:00Z"),
+				"dateClosed" : ISODate("2023-05-06T00:00:00Z"),
+				"containsProdList" : [
+					{
+						"prodListId" : 1,
+						"productId" : "P1002",
+						"quantity" : 2
+					},
+					{
+						"prodListId" : 2,
+						"productId" : "P1003",
+						"quantity" : 1
+					}
+				]
+			}
+		}
+	}
+}
+
+Find the products that have not been included in any of the shopping cart.
+
+db.shoppingCart.aggregate([{$unwind: "$PRODUCT"},{"$match":{"PRODUCT.includedIn": null}}]).pretty()
+
+{
+	"_id" : "P1004",
+	"PRODUCT" : {
+		"productId" : "P1004",
+		"productName" : "Huion Tablet",
+		"price" : {
+			"unit" : "Dollar",
+			"base" : "Singapore",
+			"value" : 360
+		},
+		"includedIn" : [
+			null
+		]
+	}
+}
+
+Find the total number of customers who do not provide his/her telephone number.
+
+db.shoppingCart.aggregate([{$unwind: "$CUSTOMER"},{"$match":{"CUSTOMER.customerPhone": null}},{"$count": "Total number of customers with no phone number"}]).pretty()
+
+{ "Total number of customers with no phone number" : 1 }
+
+bye

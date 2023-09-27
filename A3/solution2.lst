@@ -1,0 +1,697 @@
+MongoDB shell version v4.0.4
+connecting to: mongodb://127.0.0.1:4000/db
+Implicit session: session { "id" : UUID("cf718d2d-84cc-4085-8cab-511d32f5b92b") }
+MongoDB server version: 4.0.4
+Solution for A3, Task 2
+============================
+Student number: 7364283
+Name: Shaik Dawood Shameem Ahamed
+Date: 23 May 2023
+============================
+
+Before updating the closing date of cart001 of customer c12345 to 15 May 2023
+{
+	"_id" : "C12345",
+	"CUSTOMER" : {
+		"customerId" : "C12345",
+		"customerName" : "Paul Adams",
+		"customerAddress" : {
+			"street" : "718 Main Street",
+			"building" : "Idea Tower 1",
+			"postalCode" : "468419",
+			"country" : "Singapore"
+		},
+		"customerEmail" : "c12345@gmail.com",
+		"customerPhone" : "92378888",
+		"creates" : {
+			"SHOPPINGCART" : [
+				{
+					"cartId" : "cart001",
+					"dateCreated" : ISODate("2023-05-14T00:00:00Z"),
+					"dateClosed" : null,
+					"containsProdList" : [
+						{
+							"prodListId" : 1,
+							"productId" : "P1002",
+							"quantity" : 2
+						},
+						{
+							"prodListId" : 2,
+							"productId" : "P1001",
+							"quantity" : 1
+						}
+					]
+				},
+				{
+					"cartId" : "cart002",
+					"dateCreated" : ISODate("2023-05-07T00:00:00Z"),
+					"dateClosed" : ISODate("2023-05-14T00:00:00Z"),
+					"containsProdList" : [
+						{
+							"prodListId" : 1,
+							"productId" : "P1001",
+							"quantity" : 3
+						}
+					]
+				}
+			]
+		}
+	}
+}
+{
+	"_id" : "C12347",
+	"CUSTOMER" : {
+		"customerId" : "C12347",
+		"customerName" : "James Scott",
+		"customerAddress" : {
+			"street" : "18 Bukit Timah",
+			"building" : "Rose",
+			"postalCode" : "589616",
+			"country" : "Singapore"
+		},
+		"customerEmail" : "c12347@gmail.com",
+		"creates" : {
+			"SHOPPINGCART" : [
+				{
+					"cartId" : "cart003",
+					"dateCreated" : ISODate("2023-05-06T00:00:00Z"),
+					"dateClosed" : ISODate("2023-05-06T00:00:00Z"),
+					"containsProdList" : [
+						{
+							"prodListId" : 1,
+							"productId" : "P1002",
+							"quantity" : 2
+						},
+						{
+							"prodListId" : 2,
+							"productId" : "P1003",
+							"quantity" : 1
+						}
+					]
+				},
+				{
+					"cartId" : "cart004",
+					"dateCreated" : ISODate("2023-05-09T00:00:00Z"),
+					"dateClosed" : null,
+					"containsProdList" : [
+						{
+							"prodListId" : 1,
+							"productId" : "P1001",
+							"quantity" : 3
+						}
+					]
+				},
+				{
+					"cartId" : "cart005",
+					"dateCreated" : ISODate("2023-05-15T00:00:00Z"),
+					"dateClosed" : null,
+					"containsProdList" : [
+						{
+							"prodListId" : 1,
+							"productId" : "P1002",
+							"quantity" : 1
+						}
+					]
+				}
+			]
+		}
+	}
+}
+{
+	"_id" : "P1001",
+	"PRODUCT" : {
+		"productId" : "P1001",
+		"productName" : "HD Scanner",
+		"price" : {
+			"unit" : "Dollar",
+			"base" : "Australian",
+			"value" : 800
+		},
+		"includedIn" : [
+			"cart001",
+			"cart002",
+			"cart004"
+		]
+	}
+}
+{
+	"_id" : "P1002",
+	"PRODUCT" : {
+		"productId" : "P1002",
+		"productName" : "Red Toner",
+		"price" : {
+			"unit" : "Dollar",
+			"base" : "Singapore",
+			"value" : 90
+		},
+		"includedIn" : [
+			"cart001",
+			"cart003",
+			"cart005"
+		]
+	}
+}
+{
+	"_id" : "P1003",
+	"PRODUCT" : {
+		"productId" : "P1003",
+		"productName" : "Fuji Xerox Printer",
+		"price" : {
+			"unit" : "Dollar",
+			"base" : "US",
+			"value" : 400
+		},
+		"includedIn" : [
+			"cart003"
+		]
+	}
+}
+{
+	"_id" : "P1004",
+	"PRODUCT" : {
+		"productId" : "P1004",
+		"productName" : "Huion Tablet",
+		"price" : {
+			"unit" : "Dollar",
+			"base" : "Singapore",
+			"value" : 360
+		},
+		"includedIn" : [
+			null
+		]
+	}
+}
+After updating the closing date of cart001 of customer c12345 to 15 May 2023
+
+db.shoppingCart.update({"_id":"C12345","CUSTOMER.creates.SHOPPINGCART.cartId":"cart001"},{$set:{"CUSTOMER.creates.SHOPPINGCART.$.dateClosed":new Date("2023-05-15")}})
+
+WriteResult({ "nMatched" : 1, "nUpserted" : 0, "nModified" : 1 })
+{
+	"_id" : "C12345",
+	"CUSTOMER" : {
+		"customerId" : "C12345",
+		"customerName" : "Paul Adams",
+		"customerAddress" : {
+			"street" : "718 Main Street",
+			"building" : "Idea Tower 1",
+			"postalCode" : "468419",
+			"country" : "Singapore"
+		},
+		"customerEmail" : "c12345@gmail.com",
+		"customerPhone" : "92378888",
+		"creates" : {
+			"SHOPPINGCART" : [
+				{
+					"cartId" : "cart001",
+					"dateCreated" : ISODate("2023-05-14T00:00:00Z"),
+					"dateClosed" : ISODate("2023-05-15T00:00:00Z"),
+					"containsProdList" : [
+						{
+							"prodListId" : 1,
+							"productId" : "P1002",
+							"quantity" : 2
+						},
+						{
+							"prodListId" : 2,
+							"productId" : "P1001",
+							"quantity" : 1
+						}
+					]
+				},
+				{
+					"cartId" : "cart002",
+					"dateCreated" : ISODate("2023-05-07T00:00:00Z"),
+					"dateClosed" : ISODate("2023-05-14T00:00:00Z"),
+					"containsProdList" : [
+						{
+							"prodListId" : 1,
+							"productId" : "P1001",
+							"quantity" : 3
+						}
+					]
+				}
+			]
+		}
+	}
+}
+{
+	"_id" : "C12347",
+	"CUSTOMER" : {
+		"customerId" : "C12347",
+		"customerName" : "James Scott",
+		"customerAddress" : {
+			"street" : "18 Bukit Timah",
+			"building" : "Rose",
+			"postalCode" : "589616",
+			"country" : "Singapore"
+		},
+		"customerEmail" : "c12347@gmail.com",
+		"creates" : {
+			"SHOPPINGCART" : [
+				{
+					"cartId" : "cart003",
+					"dateCreated" : ISODate("2023-05-06T00:00:00Z"),
+					"dateClosed" : ISODate("2023-05-06T00:00:00Z"),
+					"containsProdList" : [
+						{
+							"prodListId" : 1,
+							"productId" : "P1002",
+							"quantity" : 2
+						},
+						{
+							"prodListId" : 2,
+							"productId" : "P1003",
+							"quantity" : 1
+						}
+					]
+				},
+				{
+					"cartId" : "cart004",
+					"dateCreated" : ISODate("2023-05-09T00:00:00Z"),
+					"dateClosed" : null,
+					"containsProdList" : [
+						{
+							"prodListId" : 1,
+							"productId" : "P1001",
+							"quantity" : 3
+						}
+					]
+				},
+				{
+					"cartId" : "cart005",
+					"dateCreated" : ISODate("2023-05-15T00:00:00Z"),
+					"dateClosed" : null,
+					"containsProdList" : [
+						{
+							"prodListId" : 1,
+							"productId" : "P1002",
+							"quantity" : 1
+						}
+					]
+				}
+			]
+		}
+	}
+}
+{
+	"_id" : "P1001",
+	"PRODUCT" : {
+		"productId" : "P1001",
+		"productName" : "HD Scanner",
+		"price" : {
+			"unit" : "Dollar",
+			"base" : "Australian",
+			"value" : 800
+		},
+		"includedIn" : [
+			"cart001",
+			"cart002",
+			"cart004"
+		]
+	}
+}
+{
+	"_id" : "P1002",
+	"PRODUCT" : {
+		"productId" : "P1002",
+		"productName" : "Red Toner",
+		"price" : {
+			"unit" : "Dollar",
+			"base" : "Singapore",
+			"value" : 90
+		},
+		"includedIn" : [
+			"cart001",
+			"cart003",
+			"cart005"
+		]
+	}
+}
+{
+	"_id" : "P1003",
+	"PRODUCT" : {
+		"productId" : "P1003",
+		"productName" : "Fuji Xerox Printer",
+		"price" : {
+			"unit" : "Dollar",
+			"base" : "US",
+			"value" : 400
+		},
+		"includedIn" : [
+			"cart003"
+		]
+	}
+}
+{
+	"_id" : "P1004",
+	"PRODUCT" : {
+		"productId" : "P1004",
+		"productName" : "Huion Tablet",
+		"price" : {
+			"unit" : "Dollar",
+			"base" : "Singapore",
+			"value" : 360
+		},
+		"includedIn" : [
+			null
+		]
+	}
+}
+
+Before deleting cart005 of customer c12347
+{
+	"_id" : "C12345",
+	"CUSTOMER" : {
+		"customerId" : "C12345",
+		"customerName" : "Paul Adams",
+		"customerAddress" : {
+			"street" : "718 Main Street",
+			"building" : "Idea Tower 1",
+			"postalCode" : "468419",
+			"country" : "Singapore"
+		},
+		"customerEmail" : "c12345@gmail.com",
+		"customerPhone" : "92378888",
+		"creates" : {
+			"SHOPPINGCART" : [
+				{
+					"cartId" : "cart001",
+					"dateCreated" : ISODate("2023-05-14T00:00:00Z"),
+					"dateClosed" : ISODate("2023-05-15T00:00:00Z"),
+					"containsProdList" : [
+						{
+							"prodListId" : 1,
+							"productId" : "P1002",
+							"quantity" : 2
+						},
+						{
+							"prodListId" : 2,
+							"productId" : "P1001",
+							"quantity" : 1
+						}
+					]
+				},
+				{
+					"cartId" : "cart002",
+					"dateCreated" : ISODate("2023-05-07T00:00:00Z"),
+					"dateClosed" : ISODate("2023-05-14T00:00:00Z"),
+					"containsProdList" : [
+						{
+							"prodListId" : 1,
+							"productId" : "P1001",
+							"quantity" : 3
+						}
+					]
+				}
+			]
+		}
+	}
+}
+{
+	"_id" : "C12347",
+	"CUSTOMER" : {
+		"customerId" : "C12347",
+		"customerName" : "James Scott",
+		"customerAddress" : {
+			"street" : "18 Bukit Timah",
+			"building" : "Rose",
+			"postalCode" : "589616",
+			"country" : "Singapore"
+		},
+		"customerEmail" : "c12347@gmail.com",
+		"creates" : {
+			"SHOPPINGCART" : [
+				{
+					"cartId" : "cart003",
+					"dateCreated" : ISODate("2023-05-06T00:00:00Z"),
+					"dateClosed" : ISODate("2023-05-06T00:00:00Z"),
+					"containsProdList" : [
+						{
+							"prodListId" : 1,
+							"productId" : "P1002",
+							"quantity" : 2
+						},
+						{
+							"prodListId" : 2,
+							"productId" : "P1003",
+							"quantity" : 1
+						}
+					]
+				},
+				{
+					"cartId" : "cart004",
+					"dateCreated" : ISODate("2023-05-09T00:00:00Z"),
+					"dateClosed" : null,
+					"containsProdList" : [
+						{
+							"prodListId" : 1,
+							"productId" : "P1001",
+							"quantity" : 3
+						}
+					]
+				},
+				{
+					"cartId" : "cart005",
+					"dateCreated" : ISODate("2023-05-15T00:00:00Z"),
+					"dateClosed" : null,
+					"containsProdList" : [
+						{
+							"prodListId" : 1,
+							"productId" : "P1002",
+							"quantity" : 1
+						}
+					]
+				}
+			]
+		}
+	}
+}
+{
+	"_id" : "P1001",
+	"PRODUCT" : {
+		"productId" : "P1001",
+		"productName" : "HD Scanner",
+		"price" : {
+			"unit" : "Dollar",
+			"base" : "Australian",
+			"value" : 800
+		},
+		"includedIn" : [
+			"cart001",
+			"cart002",
+			"cart004"
+		]
+	}
+}
+{
+	"_id" : "P1002",
+	"PRODUCT" : {
+		"productId" : "P1002",
+		"productName" : "Red Toner",
+		"price" : {
+			"unit" : "Dollar",
+			"base" : "Singapore",
+			"value" : 90
+		},
+		"includedIn" : [
+			"cart001",
+			"cart003",
+			"cart005"
+		]
+	}
+}
+{
+	"_id" : "P1003",
+	"PRODUCT" : {
+		"productId" : "P1003",
+		"productName" : "Fuji Xerox Printer",
+		"price" : {
+			"unit" : "Dollar",
+			"base" : "US",
+			"value" : 400
+		},
+		"includedIn" : [
+			"cart003"
+		]
+	}
+}
+{
+	"_id" : "P1004",
+	"PRODUCT" : {
+		"productId" : "P1004",
+		"productName" : "Huion Tablet",
+		"price" : {
+			"unit" : "Dollar",
+			"base" : "Singapore",
+			"value" : 360
+		},
+		"includedIn" : [
+			null
+		]
+	}
+}
+After deleting cart005 of customer c12347
+
+db.shoppingCart.update({"_id":"C12347", "CUSTOMER.customerId":"C12347"},{$pull:{"CUSTOMER.creates.SHOPPINGCART":{"cartId":"cart005"}}})
+
+WriteResult({ "nMatched" : 1, "nUpserted" : 0, "nModified" : 1 })
+{
+	"_id" : "C12345",
+	"CUSTOMER" : {
+		"customerId" : "C12345",
+		"customerName" : "Paul Adams",
+		"customerAddress" : {
+			"street" : "718 Main Street",
+			"building" : "Idea Tower 1",
+			"postalCode" : "468419",
+			"country" : "Singapore"
+		},
+		"customerEmail" : "c12345@gmail.com",
+		"customerPhone" : "92378888",
+		"creates" : {
+			"SHOPPINGCART" : [
+				{
+					"cartId" : "cart001",
+					"dateCreated" : ISODate("2023-05-14T00:00:00Z"),
+					"dateClosed" : ISODate("2023-05-15T00:00:00Z"),
+					"containsProdList" : [
+						{
+							"prodListId" : 1,
+							"productId" : "P1002",
+							"quantity" : 2
+						},
+						{
+							"prodListId" : 2,
+							"productId" : "P1001",
+							"quantity" : 1
+						}
+					]
+				},
+				{
+					"cartId" : "cart002",
+					"dateCreated" : ISODate("2023-05-07T00:00:00Z"),
+					"dateClosed" : ISODate("2023-05-14T00:00:00Z"),
+					"containsProdList" : [
+						{
+							"prodListId" : 1,
+							"productId" : "P1001",
+							"quantity" : 3
+						}
+					]
+				}
+			]
+		}
+	}
+}
+{
+	"_id" : "C12347",
+	"CUSTOMER" : {
+		"customerId" : "C12347",
+		"customerName" : "James Scott",
+		"customerAddress" : {
+			"street" : "18 Bukit Timah",
+			"building" : "Rose",
+			"postalCode" : "589616",
+			"country" : "Singapore"
+		},
+		"customerEmail" : "c12347@gmail.com",
+		"creates" : {
+			"SHOPPINGCART" : [
+				{
+					"cartId" : "cart003",
+					"dateCreated" : ISODate("2023-05-06T00:00:00Z"),
+					"dateClosed" : ISODate("2023-05-06T00:00:00Z"),
+					"containsProdList" : [
+						{
+							"prodListId" : 1,
+							"productId" : "P1002",
+							"quantity" : 2
+						},
+						{
+							"prodListId" : 2,
+							"productId" : "P1003",
+							"quantity" : 1
+						}
+					]
+				},
+				{
+					"cartId" : "cart004",
+					"dateCreated" : ISODate("2023-05-09T00:00:00Z"),
+					"dateClosed" : null,
+					"containsProdList" : [
+						{
+							"prodListId" : 1,
+							"productId" : "P1001",
+							"quantity" : 3
+						}
+					]
+				}
+			]
+		}
+	}
+}
+{
+	"_id" : "P1001",
+	"PRODUCT" : {
+		"productId" : "P1001",
+		"productName" : "HD Scanner",
+		"price" : {
+			"unit" : "Dollar",
+			"base" : "Australian",
+			"value" : 800
+		},
+		"includedIn" : [
+			"cart001",
+			"cart002",
+			"cart004"
+		]
+	}
+}
+{
+	"_id" : "P1002",
+	"PRODUCT" : {
+		"productId" : "P1002",
+		"productName" : "Red Toner",
+		"price" : {
+			"unit" : "Dollar",
+			"base" : "Singapore",
+			"value" : 90
+		},
+		"includedIn" : [
+			"cart001",
+			"cart003",
+			"cart005"
+		]
+	}
+}
+{
+	"_id" : "P1003",
+	"PRODUCT" : {
+		"productId" : "P1003",
+		"productName" : "Fuji Xerox Printer",
+		"price" : {
+			"unit" : "Dollar",
+			"base" : "US",
+			"value" : 400
+		},
+		"includedIn" : [
+			"cart003"
+		]
+	}
+}
+{
+	"_id" : "P1004",
+	"PRODUCT" : {
+		"productId" : "P1004",
+		"productName" : "Huion Tablet",
+		"price" : {
+			"unit" : "Dollar",
+			"base" : "Singapore",
+			"value" : 360
+		},
+		"includedIn" : [
+			null
+		]
+	}
+}
+bye

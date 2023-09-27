@@ -1,0 +1,77 @@
+MongoDB shell version v4.0.4
+connecting to: mongodb://127.0.0.1:4000/7364283
+Implicit session: session { "id" : UUID("62f06e01-67f9-4a5c-9fe3-0abb4a6c2fb9") }
+MongoDB server version: 4.0.4
+Solution for A3, Task 1
+============================
+Student number: 7364283
+Name: Shaik Dawood Shameem Ahamed
+Date: 23 May 2023
+============================
+
+Creating a database company with 2 departments, 2 projects with 2 deadlines each
+WriteResult({ "nInserted" : 1 })
+{
+	"_id" : ObjectId("6472f8aa9cde7e157ba7e1b4"),
+	"COMPANY" : {
+		"name" : "ABC Company",
+		"city" : "Wollongong",
+		"street" : "123 street",
+		"bldg#" : [
+			"23",
+			"34",
+			"45"
+		],
+		"consists of" : {
+			"DEPARTMENT" : [
+				{
+					"dname" : "Marketing",
+					"chairperson" : "Shameem",
+					"budget" : "200000"
+				},
+				{
+					"dname" : "Communication",
+					"chairperson" : "Ahamed",
+					"budget" : "40000"
+				}
+			]
+		},
+		"implements" : {
+			"PROJECT" : [
+				{
+					"code" : "PROJ001",
+					"title" : "budget",
+					"has" : {
+						"DEADLINES" : [
+							{
+								"number" : "1",
+								"date" : "24-5-23"
+							},
+							{
+								"number" : "2",
+								"date" : "24-7-23"
+							}
+						]
+					}
+				},
+				{
+					"code" : "PROJ002",
+					"title" : "Recruitment",
+					"has" : {
+						"DEADLINES" : [
+							{
+								"number" : "1",
+								"date" : "24-8-23"
+							},
+							{
+								"number" : "2",
+								"date" : "24-10-23"
+							}
+						]
+					}
+				}
+			]
+		}
+	}
+}
+bye

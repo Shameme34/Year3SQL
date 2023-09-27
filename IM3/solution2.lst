@@ -1,0 +1,1072 @@
+MongoDB shell version v4.0.4
+connecting to: mongodb://127.0.0.1:4000/db
+Implicit session: session { "id" : UUID("a5166eb2-9c38-4a5a-b43c-f1d1c6ff4fcd") }
+MongoDB server version: 4.0.4
+Solution for IT3, Task 2
+============================
+Student number: 7364283
+Name: Shaik Dawood Shameem Ahamed
+Date: 23 May 2023
+============================
+
+Details of John Fox
+{
+	"_id" : ObjectId("646e53f254524cb4592192e7"),
+	"EMPLOYEE" : {
+		"name" : "John Fox",
+		"position" : "mechanic"
+	}
+}
+Removal of John Fox the mechanic
+db.transport.remove({"EMPLOYEE.name":"John Fox", "EMPLOYEE.position":"mechanic"})
+WriteResult({ "nRemoved" : 1 })
+Details of mechanic John Fox after removal
+db.transport.find({"EMPLOYEE.name":"John Fox"},{"EMPLOYEE.name":"John Fox","EMPLOYEE.position":"mechanic"}).pretty()
+Done!
+
+Details of employee 11 before the update
+{
+	"_id" : ObjectId("646e53f254524cb4592192e8"),
+	"EMPLOYEE" : {
+		"e#" : "11",
+		"name" : "Adam Fox",
+		"dob" : "04-MAY-70",
+		"address" : "45 Victoria St. Hurstville, NSW 2456",
+		"hiredate" : "12-JAN-99",
+		"position" : "driver",
+		"licence" : "20005",
+		"status" : "ON LEAVE"
+	}
+}
+Update by removing dob of employee 11
+db.transport.update({"EMPLOYEE.e#":"11"},{"$unset": {"EMPLOYEE.dob": null} })
+WriteResult({ "nMatched" : 1, "nUpserted" : 0, "nModified" : 1 })
+Details of employee 11 after the update
+db.transport.find({"EMPLOYEE.e#":"11"}, {"EMPLOYEE.trips":0}).pretty()
+{
+	"_id" : ObjectId("646e53f254524cb4592192e8"),
+	"EMPLOYEE" : {
+		"e#" : "11",
+		"name" : "Adam Fox",
+		"address" : "45 Victoria St. Hurstville, NSW 2456",
+		"hiredate" : "12-JAN-99",
+		"position" : "driver",
+		"licence" : "20005",
+		"status" : "ON LEAVE"
+	}
+}
+Done!
+
+Details of employee 11 before the update
+{
+	"_id" : ObjectId("646e53f254524cb4592192e8"),
+	"EMPLOYEE" : {
+		"e#" : "11",
+		"name" : "Adam Fox",
+		"address" : "45 Victoria St. Hurstville, NSW 2456",
+		"hiredate" : "12-JAN-99",
+		"position" : "driver",
+		"licence" : "20005",
+		"status" : "ON LEAVE",
+		"trips" : [
+			{
+				"trip number" : "7",
+				"registration" : "KKK007",
+				"trip date" : "13-MAR-95",
+				"legs" : [
+					"Melbourne",
+					"Sydney",
+					"Adelaide",
+					"Sydney"
+				]
+			},
+			{
+				"trip number" : "15",
+				"registration" : "PKR768",
+				"trip date" : "24-MAY-96",
+				"legs" : [
+					"Sydney",
+					"Melbourne",
+					"Adelaide"
+				]
+			},
+			{
+				"trip number" : "19",
+				"registration" : "SST005",
+				"trip date" : "23-JAN-97",
+				"legs" : [
+					"Melbourne",
+					"Sydney",
+					"Adelaide",
+					"Sydney"
+				]
+			},
+			{
+				"trip number" : "22",
+				"registration" : "PKR008",
+				"trip date" : "23-APR-97",
+				"legs" : [
+					"Melbourne",
+					"Sydney",
+					"Adelaide",
+					"Sydney"
+				]
+			},
+			{
+				"trip number" : "34",
+				"registration" : "PKR008",
+				"trip date" : "23-APR-98",
+				"legs" : [
+					"Wollongong",
+					"Sydney",
+					"Perth",
+					"Sydney"
+				]
+			},
+			{
+				"trip number" : "43",
+				"registration" : "KKK007",
+				"trip date" : "12-MAR-99",
+				"legs" : [
+					"Newcastle",
+					"Brisbane",
+					"Rockhampton",
+					"Brisbane"
+				]
+			},
+			{
+				"trip number" : "51",
+				"registration" : "PKR768",
+				"trip date" : "24-MAY-00",
+				"legs" : [
+					"Sydney",
+					"Newcastle",
+					"Brisbane",
+					"Rockhampton"
+				]
+			},
+			{
+				"trip number" : "55",
+				"registration" : "SST005",
+				"trip date" : "23-JAN-00",
+				"legs" : [ ]
+			},
+			{
+				"trip number" : "58",
+				"registration" : "PKR008",
+				"trip date" : "23-APR-00",
+				"legs" : [
+					"Sydney",
+					"Newcastle",
+					"Brisbane",
+					"Rockhampton"
+				]
+			},
+			{
+				"trip number" : "70",
+				"registration" : "PKR008",
+				"trip date" : "04-JUL-01",
+				"legs" : [
+					"Sydney",
+					"Newcastle",
+					"Brisbane",
+					"Rockhampton"
+				]
+			},
+			{
+				"trip number" : "79",
+				"registration" : "KKK007",
+				"trip date" : "13-JUL-02",
+				"legs" : [
+					"Sydney",
+					"Brisbane"
+				]
+			},
+			{
+				"trip number" : "87",
+				"registration" : "PKR768",
+				"trip date" : "21-JUL-02",
+				"legs" : [
+					"Sydney",
+					"Newcastle",
+					"Brisbane",
+					"Rockhampton"
+				]
+			},
+			{
+				"trip number" : "91",
+				"registration" : "SST005",
+				"trip date" : "25-JUL-02",
+				"legs" : [
+					"Sydney",
+					"Newcastle",
+					"Brisbane",
+					"Rockhampton"
+				]
+			},
+			{
+				"trip number" : "94",
+				"registration" : "PKR008",
+				"trip date" : "28-JUL-02",
+				"legs" : [
+					"Sydney",
+					"Melbourne",
+					"Adelaide",
+					"Perth",
+					"Sydney"
+				]
+			},
+			{
+				"trip number" : "106",
+				"registration" : "PKR008",
+				"trip date" : "23-AUG-02",
+				"legs" : [
+					"Melbourne",
+					"Sydney",
+					"Perth",
+					"Melbourne"
+				]
+			}
+		]
+	}
+}
+Update by removing trip 7 of employee 11
+db.transport.update({"EMPLOYEE.e#":"11"},{$pull: {"EMPLOYEE.trips":{"trip number":"7"}}})
+WriteResult({ "nMatched" : 1, "nUpserted" : 0, "nModified" : 1 })
+Details of employee 11 after the update
+db.transport.find({"EMPLOYEE.e#":"11"}).pretty()
+{
+	"_id" : ObjectId("646e53f254524cb4592192e8"),
+	"EMPLOYEE" : {
+		"e#" : "11",
+		"name" : "Adam Fox",
+		"address" : "45 Victoria St. Hurstville, NSW 2456",
+		"hiredate" : "12-JAN-99",
+		"position" : "driver",
+		"licence" : "20005",
+		"status" : "ON LEAVE",
+		"trips" : [
+			{
+				"trip number" : "15",
+				"registration" : "PKR768",
+				"trip date" : "24-MAY-96",
+				"legs" : [
+					"Sydney",
+					"Melbourne",
+					"Adelaide"
+				]
+			},
+			{
+				"trip number" : "19",
+				"registration" : "SST005",
+				"trip date" : "23-JAN-97",
+				"legs" : [
+					"Melbourne",
+					"Sydney",
+					"Adelaide",
+					"Sydney"
+				]
+			},
+			{
+				"trip number" : "22",
+				"registration" : "PKR008",
+				"trip date" : "23-APR-97",
+				"legs" : [
+					"Melbourne",
+					"Sydney",
+					"Adelaide",
+					"Sydney"
+				]
+			},
+			{
+				"trip number" : "34",
+				"registration" : "PKR008",
+				"trip date" : "23-APR-98",
+				"legs" : [
+					"Wollongong",
+					"Sydney",
+					"Perth",
+					"Sydney"
+				]
+			},
+			{
+				"trip number" : "43",
+				"registration" : "KKK007",
+				"trip date" : "12-MAR-99",
+				"legs" : [
+					"Newcastle",
+					"Brisbane",
+					"Rockhampton",
+					"Brisbane"
+				]
+			},
+			{
+				"trip number" : "51",
+				"registration" : "PKR768",
+				"trip date" : "24-MAY-00",
+				"legs" : [
+					"Sydney",
+					"Newcastle",
+					"Brisbane",
+					"Rockhampton"
+				]
+			},
+			{
+				"trip number" : "55",
+				"registration" : "SST005",
+				"trip date" : "23-JAN-00",
+				"legs" : [ ]
+			},
+			{
+				"trip number" : "58",
+				"registration" : "PKR008",
+				"trip date" : "23-APR-00",
+				"legs" : [
+					"Sydney",
+					"Newcastle",
+					"Brisbane",
+					"Rockhampton"
+				]
+			},
+			{
+				"trip number" : "70",
+				"registration" : "PKR008",
+				"trip date" : "04-JUL-01",
+				"legs" : [
+					"Sydney",
+					"Newcastle",
+					"Brisbane",
+					"Rockhampton"
+				]
+			},
+			{
+				"trip number" : "79",
+				"registration" : "KKK007",
+				"trip date" : "13-JUL-02",
+				"legs" : [
+					"Sydney",
+					"Brisbane"
+				]
+			},
+			{
+				"trip number" : "87",
+				"registration" : "PKR768",
+				"trip date" : "21-JUL-02",
+				"legs" : [
+					"Sydney",
+					"Newcastle",
+					"Brisbane",
+					"Rockhampton"
+				]
+			},
+			{
+				"trip number" : "91",
+				"registration" : "SST005",
+				"trip date" : "25-JUL-02",
+				"legs" : [
+					"Sydney",
+					"Newcastle",
+					"Brisbane",
+					"Rockhampton"
+				]
+			},
+			{
+				"trip number" : "94",
+				"registration" : "PKR008",
+				"trip date" : "28-JUL-02",
+				"legs" : [
+					"Sydney",
+					"Melbourne",
+					"Adelaide",
+					"Perth",
+					"Sydney"
+				]
+			},
+			{
+				"trip number" : "106",
+				"registration" : "PKR008",
+				"trip date" : "23-AUG-02",
+				"legs" : [
+					"Melbourne",
+					"Sydney",
+					"Perth",
+					"Melbourne"
+				]
+			}
+		]
+	}
+}
+Done!
+
+Details of employee 11 before new trip
+{
+	"_id" : ObjectId("646e53f254524cb4592192e8"),
+	"EMPLOYEE" : {
+		"e#" : "11",
+		"name" : "Adam Fox",
+		"address" : "45 Victoria St. Hurstville, NSW 2456",
+		"hiredate" : "12-JAN-99",
+		"position" : "driver",
+		"licence" : "20005",
+		"status" : "ON LEAVE",
+		"trips" : [
+			{
+				"trip number" : "15",
+				"registration" : "PKR768",
+				"trip date" : "24-MAY-96",
+				"legs" : [
+					"Sydney",
+					"Melbourne",
+					"Adelaide"
+				]
+			},
+			{
+				"trip number" : "19",
+				"registration" : "SST005",
+				"trip date" : "23-JAN-97",
+				"legs" : [
+					"Melbourne",
+					"Sydney",
+					"Adelaide",
+					"Sydney"
+				]
+			},
+			{
+				"trip number" : "22",
+				"registration" : "PKR008",
+				"trip date" : "23-APR-97",
+				"legs" : [
+					"Melbourne",
+					"Sydney",
+					"Adelaide",
+					"Sydney"
+				]
+			},
+			{
+				"trip number" : "34",
+				"registration" : "PKR008",
+				"trip date" : "23-APR-98",
+				"legs" : [
+					"Wollongong",
+					"Sydney",
+					"Perth",
+					"Sydney"
+				]
+			},
+			{
+				"trip number" : "43",
+				"registration" : "KKK007",
+				"trip date" : "12-MAR-99",
+				"legs" : [
+					"Newcastle",
+					"Brisbane",
+					"Rockhampton",
+					"Brisbane"
+				]
+			},
+			{
+				"trip number" : "51",
+				"registration" : "PKR768",
+				"trip date" : "24-MAY-00",
+				"legs" : [
+					"Sydney",
+					"Newcastle",
+					"Brisbane",
+					"Rockhampton"
+				]
+			},
+			{
+				"trip number" : "55",
+				"registration" : "SST005",
+				"trip date" : "23-JAN-00",
+				"legs" : [ ]
+			},
+			{
+				"trip number" : "58",
+				"registration" : "PKR008",
+				"trip date" : "23-APR-00",
+				"legs" : [
+					"Sydney",
+					"Newcastle",
+					"Brisbane",
+					"Rockhampton"
+				]
+			},
+			{
+				"trip number" : "70",
+				"registration" : "PKR008",
+				"trip date" : "04-JUL-01",
+				"legs" : [
+					"Sydney",
+					"Newcastle",
+					"Brisbane",
+					"Rockhampton"
+				]
+			},
+			{
+				"trip number" : "79",
+				"registration" : "KKK007",
+				"trip date" : "13-JUL-02",
+				"legs" : [
+					"Sydney",
+					"Brisbane"
+				]
+			},
+			{
+				"trip number" : "87",
+				"registration" : "PKR768",
+				"trip date" : "21-JUL-02",
+				"legs" : [
+					"Sydney",
+					"Newcastle",
+					"Brisbane",
+					"Rockhampton"
+				]
+			},
+			{
+				"trip number" : "91",
+				"registration" : "SST005",
+				"trip date" : "25-JUL-02",
+				"legs" : [
+					"Sydney",
+					"Newcastle",
+					"Brisbane",
+					"Rockhampton"
+				]
+			},
+			{
+				"trip number" : "94",
+				"registration" : "PKR008",
+				"trip date" : "28-JUL-02",
+				"legs" : [
+					"Sydney",
+					"Melbourne",
+					"Adelaide",
+					"Perth",
+					"Sydney"
+				]
+			},
+			{
+				"trip number" : "106",
+				"registration" : "PKR008",
+				"trip date" : "23-AUG-02",
+				"legs" : [
+					"Melbourne",
+					"Sydney",
+					"Perth",
+					"Melbourne"
+				]
+			}
+		]
+	}
+}
+Update by add new trip 999 to employee 11
+db.transport.update({"EMPLOYEE.e#":"11"},{$push: {"EMPLOYEE.trips":{"trip number":"999", "registration":"PKR786"}}})
+WriteResult({ "nMatched" : 1, "nUpserted" : 0, "nModified" : 1 })
+Details of employee 11 after the update
+db.transport.find({"EMPLOYEE.e#":"11"}).pretty()
+{
+	"_id" : ObjectId("646e53f254524cb4592192e8"),
+	"EMPLOYEE" : {
+		"e#" : "11",
+		"name" : "Adam Fox",
+		"address" : "45 Victoria St. Hurstville, NSW 2456",
+		"hiredate" : "12-JAN-99",
+		"position" : "driver",
+		"licence" : "20005",
+		"status" : "ON LEAVE",
+		"trips" : [
+			{
+				"trip number" : "15",
+				"registration" : "PKR768",
+				"trip date" : "24-MAY-96",
+				"legs" : [
+					"Sydney",
+					"Melbourne",
+					"Adelaide"
+				]
+			},
+			{
+				"trip number" : "19",
+				"registration" : "SST005",
+				"trip date" : "23-JAN-97",
+				"legs" : [
+					"Melbourne",
+					"Sydney",
+					"Adelaide",
+					"Sydney"
+				]
+			},
+			{
+				"trip number" : "22",
+				"registration" : "PKR008",
+				"trip date" : "23-APR-97",
+				"legs" : [
+					"Melbourne",
+					"Sydney",
+					"Adelaide",
+					"Sydney"
+				]
+			},
+			{
+				"trip number" : "34",
+				"registration" : "PKR008",
+				"trip date" : "23-APR-98",
+				"legs" : [
+					"Wollongong",
+					"Sydney",
+					"Perth",
+					"Sydney"
+				]
+			},
+			{
+				"trip number" : "43",
+				"registration" : "KKK007",
+				"trip date" : "12-MAR-99",
+				"legs" : [
+					"Newcastle",
+					"Brisbane",
+					"Rockhampton",
+					"Brisbane"
+				]
+			},
+			{
+				"trip number" : "51",
+				"registration" : "PKR768",
+				"trip date" : "24-MAY-00",
+				"legs" : [
+					"Sydney",
+					"Newcastle",
+					"Brisbane",
+					"Rockhampton"
+				]
+			},
+			{
+				"trip number" : "55",
+				"registration" : "SST005",
+				"trip date" : "23-JAN-00",
+				"legs" : [ ]
+			},
+			{
+				"trip number" : "58",
+				"registration" : "PKR008",
+				"trip date" : "23-APR-00",
+				"legs" : [
+					"Sydney",
+					"Newcastle",
+					"Brisbane",
+					"Rockhampton"
+				]
+			},
+			{
+				"trip number" : "70",
+				"registration" : "PKR008",
+				"trip date" : "04-JUL-01",
+				"legs" : [
+					"Sydney",
+					"Newcastle",
+					"Brisbane",
+					"Rockhampton"
+				]
+			},
+			{
+				"trip number" : "79",
+				"registration" : "KKK007",
+				"trip date" : "13-JUL-02",
+				"legs" : [
+					"Sydney",
+					"Brisbane"
+				]
+			},
+			{
+				"trip number" : "87",
+				"registration" : "PKR768",
+				"trip date" : "21-JUL-02",
+				"legs" : [
+					"Sydney",
+					"Newcastle",
+					"Brisbane",
+					"Rockhampton"
+				]
+			},
+			{
+				"trip number" : "91",
+				"registration" : "SST005",
+				"trip date" : "25-JUL-02",
+				"legs" : [
+					"Sydney",
+					"Newcastle",
+					"Brisbane",
+					"Rockhampton"
+				]
+			},
+			{
+				"trip number" : "94",
+				"registration" : "PKR008",
+				"trip date" : "28-JUL-02",
+				"legs" : [
+					"Sydney",
+					"Melbourne",
+					"Adelaide",
+					"Perth",
+					"Sydney"
+				]
+			},
+			{
+				"trip number" : "106",
+				"registration" : "PKR008",
+				"trip date" : "23-AUG-02",
+				"legs" : [
+					"Melbourne",
+					"Sydney",
+					"Perth",
+					"Melbourne"
+				]
+			},
+			{
+				"trip number" : "999",
+				"registration" : "PKR786"
+			}
+		]
+	}
+}
+Done!
+
+Details of employee 11 before new trip
+{
+	"_id" : ObjectId("646e53f254524cb4592192e8"),
+	"EMPLOYEE" : {
+		"e#" : "11",
+		"name" : "Adam Fox",
+		"address" : "45 Victoria St. Hurstville, NSW 2456",
+		"hiredate" : "12-JAN-99",
+		"position" : "driver",
+		"licence" : "20005",
+		"status" : "ON LEAVE",
+		"trips" : [
+			{
+				"trip number" : "15",
+				"registration" : "PKR768",
+				"trip date" : "24-MAY-96",
+				"legs" : [
+					"Sydney",
+					"Melbourne",
+					"Adelaide"
+				]
+			},
+			{
+				"trip number" : "19",
+				"registration" : "SST005",
+				"trip date" : "23-JAN-97",
+				"legs" : [
+					"Melbourne",
+					"Sydney",
+					"Adelaide",
+					"Sydney"
+				]
+			},
+			{
+				"trip number" : "22",
+				"registration" : "PKR008",
+				"trip date" : "23-APR-97",
+				"legs" : [
+					"Melbourne",
+					"Sydney",
+					"Adelaide",
+					"Sydney"
+				]
+			},
+			{
+				"trip number" : "34",
+				"registration" : "PKR008",
+				"trip date" : "23-APR-98",
+				"legs" : [
+					"Wollongong",
+					"Sydney",
+					"Perth",
+					"Sydney"
+				]
+			},
+			{
+				"trip number" : "43",
+				"registration" : "KKK007",
+				"trip date" : "12-MAR-99",
+				"legs" : [
+					"Newcastle",
+					"Brisbane",
+					"Rockhampton",
+					"Brisbane"
+				]
+			},
+			{
+				"trip number" : "51",
+				"registration" : "PKR768",
+				"trip date" : "24-MAY-00",
+				"legs" : [
+					"Sydney",
+					"Newcastle",
+					"Brisbane",
+					"Rockhampton"
+				]
+			},
+			{
+				"trip number" : "55",
+				"registration" : "SST005",
+				"trip date" : "23-JAN-00",
+				"legs" : [ ]
+			},
+			{
+				"trip number" : "58",
+				"registration" : "PKR008",
+				"trip date" : "23-APR-00",
+				"legs" : [
+					"Sydney",
+					"Newcastle",
+					"Brisbane",
+					"Rockhampton"
+				]
+			},
+			{
+				"trip number" : "70",
+				"registration" : "PKR008",
+				"trip date" : "04-JUL-01",
+				"legs" : [
+					"Sydney",
+					"Newcastle",
+					"Brisbane",
+					"Rockhampton"
+				]
+			},
+			{
+				"trip number" : "79",
+				"registration" : "KKK007",
+				"trip date" : "13-JUL-02",
+				"legs" : [
+					"Sydney",
+					"Brisbane"
+				]
+			},
+			{
+				"trip number" : "87",
+				"registration" : "PKR768",
+				"trip date" : "21-JUL-02",
+				"legs" : [
+					"Sydney",
+					"Newcastle",
+					"Brisbane",
+					"Rockhampton"
+				]
+			},
+			{
+				"trip number" : "91",
+				"registration" : "SST005",
+				"trip date" : "25-JUL-02",
+				"legs" : [
+					"Sydney",
+					"Newcastle",
+					"Brisbane",
+					"Rockhampton"
+				]
+			},
+			{
+				"trip number" : "94",
+				"registration" : "PKR008",
+				"trip date" : "28-JUL-02",
+				"legs" : [
+					"Sydney",
+					"Melbourne",
+					"Adelaide",
+					"Perth",
+					"Sydney"
+				]
+			},
+			{
+				"trip number" : "106",
+				"registration" : "PKR008",
+				"trip date" : "23-AUG-02",
+				"legs" : [
+					"Melbourne",
+					"Sydney",
+					"Perth",
+					"Melbourne"
+				]
+			},
+			{
+				"trip number" : "999",
+				"registration" : "PKR786"
+			}
+		]
+	}
+}
+Update by changin date of trip 15 of employee 11
+db.transport.update({"EMPLOYEE.e#":"11", "EMPLOYEE.trips.trip number":"15"},{$set: {"EMPLOYEE.trips.$.trip date": "28-SEP-18"}})
+WriteResult({ "nMatched" : 1, "nUpserted" : 0, "nModified" : 1 })
+Details of employee 11 after the update
+db.transport.find({"EMPLOYEE.e#":"11"}).pretty()
+{
+	"_id" : ObjectId("646e53f254524cb4592192e8"),
+	"EMPLOYEE" : {
+		"e#" : "11",
+		"name" : "Adam Fox",
+		"address" : "45 Victoria St. Hurstville, NSW 2456",
+		"hiredate" : "12-JAN-99",
+		"position" : "driver",
+		"licence" : "20005",
+		"status" : "ON LEAVE",
+		"trips" : [
+			{
+				"trip number" : "15",
+				"registration" : "PKR768",
+				"trip date" : "28-SEP-18",
+				"legs" : [
+					"Sydney",
+					"Melbourne",
+					"Adelaide"
+				]
+			},
+			{
+				"trip number" : "19",
+				"registration" : "SST005",
+				"trip date" : "23-JAN-97",
+				"legs" : [
+					"Melbourne",
+					"Sydney",
+					"Adelaide",
+					"Sydney"
+				]
+			},
+			{
+				"trip number" : "22",
+				"registration" : "PKR008",
+				"trip date" : "23-APR-97",
+				"legs" : [
+					"Melbourne",
+					"Sydney",
+					"Adelaide",
+					"Sydney"
+				]
+			},
+			{
+				"trip number" : "34",
+				"registration" : "PKR008",
+				"trip date" : "23-APR-98",
+				"legs" : [
+					"Wollongong",
+					"Sydney",
+					"Perth",
+					"Sydney"
+				]
+			},
+			{
+				"trip number" : "43",
+				"registration" : "KKK007",
+				"trip date" : "12-MAR-99",
+				"legs" : [
+					"Newcastle",
+					"Brisbane",
+					"Rockhampton",
+					"Brisbane"
+				]
+			},
+			{
+				"trip number" : "51",
+				"registration" : "PKR768",
+				"trip date" : "24-MAY-00",
+				"legs" : [
+					"Sydney",
+					"Newcastle",
+					"Brisbane",
+					"Rockhampton"
+				]
+			},
+			{
+				"trip number" : "55",
+				"registration" : "SST005",
+				"trip date" : "23-JAN-00",
+				"legs" : [ ]
+			},
+			{
+				"trip number" : "58",
+				"registration" : "PKR008",
+				"trip date" : "23-APR-00",
+				"legs" : [
+					"Sydney",
+					"Newcastle",
+					"Brisbane",
+					"Rockhampton"
+				]
+			},
+			{
+				"trip number" : "70",
+				"registration" : "PKR008",
+				"trip date" : "04-JUL-01",
+				"legs" : [
+					"Sydney",
+					"Newcastle",
+					"Brisbane",
+					"Rockhampton"
+				]
+			},
+			{
+				"trip number" : "79",
+				"registration" : "KKK007",
+				"trip date" : "13-JUL-02",
+				"legs" : [
+					"Sydney",
+					"Brisbane"
+				]
+			},
+			{
+				"trip number" : "87",
+				"registration" : "PKR768",
+				"trip date" : "21-JUL-02",
+				"legs" : [
+					"Sydney",
+					"Newcastle",
+					"Brisbane",
+					"Rockhampton"
+				]
+			},
+			{
+				"trip number" : "91",
+				"registration" : "SST005",
+				"trip date" : "25-JUL-02",
+				"legs" : [
+					"Sydney",
+					"Newcastle",
+					"Brisbane",
+					"Rockhampton"
+				]
+			},
+			{
+				"trip number" : "94",
+				"registration" : "PKR008",
+				"trip date" : "28-JUL-02",
+				"legs" : [
+					"Sydney",
+					"Melbourne",
+					"Adelaide",
+					"Perth",
+					"Sydney"
+				]
+			},
+			{
+				"trip number" : "106",
+				"registration" : "PKR008",
+				"trip date" : "23-AUG-02",
+				"legs" : [
+					"Melbourne",
+					"Sydney",
+					"Perth",
+					"Melbourne"
+				]
+			},
+			{
+				"trip number" : "999",
+				"registration" : "PKR786"
+			}
+		]
+	}
+}
+Done!
+bye
